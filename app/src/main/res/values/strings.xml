@@ -2,4 +2,11 @@
     <string name="app_name">Dictionary</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="english_flag">English</string>
+    <string name="persian_flag">Persian</string>
+    <string name="menu_add">add</string>
+    <string name="change_mode">ChangeMode</string>
+    <string name="item_search">Search</string>
+    <string name="main_word">Word</string>
+    <string name="word_translate">Translate</string>
 </resources>
