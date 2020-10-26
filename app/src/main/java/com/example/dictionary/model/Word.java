@@ -4,10 +4,11 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import java.io.Serializable;
 import java.util.UUID;
 
 @Entity(tableName = "wordTable")
-public class Word {
+public class Word implements Serializable {
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "wordId")
@@ -21,6 +22,20 @@ public class Word {
 
     @ColumnInfo(name = "persian_word")
     private String mPersianWord;
+
+    public Word(){
+        this(UUID.randomUUID());
+    }
+
+    public Word(UUID uuid){
+        mId = uuid;
+    }
+
+    public Word(UUID id, String englishWord, String persianWord){
+        mId = id;
+        mEnglishWord = englishWord;
+        mPersianWord = persianWord;
+    }
 
     public int getWordId() {
         return wordId;

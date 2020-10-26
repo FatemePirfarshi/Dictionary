@@ -28,10 +28,10 @@ public class WordDBRepository implements WordDAO {
     private WordDBRepository(Context context){
         mContext = context.getApplicationContext();
 
-        mWordDAO = Room.databaseBuilder(mContext,
-                WordDatabase.class, "word.db")
+        mWordDAO = Room.databaseBuilder(mContext, WordDatabase.class, "word.db")
                 .allowMainThreadQueries()
-                .build().getWordDAO();
+                .build()
+                .getWordDAO();
     }
 
     @Override
