@@ -19,6 +19,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -39,6 +40,7 @@ public class WordListFragment extends Fragment {
     public static final int REQUEST_CODE_WORD_DETAIL = 1;
     public static final String TAG = "WLF";
     public static final String TAG_WORD_DETAIL_FRAGMENT = "wordDetailFragment";
+    public static final String BUNDLE_LANGUAGE_MODE = "languageMode";
     private RecyclerView mRecyclerView;
     private FloatingActionButton mAddButton;
 
@@ -64,6 +66,9 @@ public class WordListFragment extends Fragment {
 
         setHasOptionsMenu(true);
         mRepository = WordDBRepository.getInstance(getActivity());
+
+        if(savedInstanceState != null)
+            isEnglish = savedInstanceState.getBoolean(BUNDLE_LANGUAGE_MODE, true);
     }
 
     @Override
@@ -86,7 +91,13 @@ public class WordListFragment extends Fragment {
 
     private void initViews() {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        setSubTitle();
         updateUI();
+    }
+
+    private void setSubTitle() {
+        AppCompatActivity activity = (AppCompatActivity) getActivity();
+        activity.getSupportActionBar().setSubtitle(mRepository.getWords().size() + " words");
     }
 
     private void updateUI() {
@@ -99,6 +110,13 @@ public class WordListFragment extends Fragment {
             mWordAdapter.setWords(words);
             mWordAdapter.notifyDataSetChanged();
         }
+        setSubTitle();
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean(BUNDLE_LANGUAGE_MODE, isEnglish);
     }
 
     private void setListeners() {
