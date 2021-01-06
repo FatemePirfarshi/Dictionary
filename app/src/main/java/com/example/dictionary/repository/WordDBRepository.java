@@ -45,6 +45,16 @@ public class WordDBRepository implements WordDAO {
     }
 
     @Override
+    public List<Word> getEnglishWords() {
+        return mWordDAO.getEnglishWords();
+    }
+
+    @Override
+    public List<Word> getPersianWords() {
+        return mWordDAO.getPersianWords();
+    }
+
+    @Override
     public void insertWord(Word word) {
         mWordDAO.insertWord(word);
     }

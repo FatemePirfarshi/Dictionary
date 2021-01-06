@@ -88,12 +88,14 @@ public class WordDetailFragment extends BottomSheetDialogFragment {
                 dismiss();
             }
         });
+
         mLayoutShare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //todo
+                shareReportIntent();
             }
         });
+
         mLayoutDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -106,4 +108,25 @@ public class WordDetailFragment extends BottomSheetDialogFragment {
             }
         });
     }
+
+    private void shareReportIntent() {
+        Intent sendIntent = new Intent(Intent.ACTION_SEND);
+        sendIntent.putExtra(Intent.EXTRA_TEXT, getReport());
+        sendIntent.setType("text/plain");
+
+        Intent shareIntent = Intent.createChooser(
+                sendIntent, getString(R.string.send_report));
+
+        if (sendIntent.resolveActivity(getActivity().getPackageManager()) != null)
+            startActivity(shareIntent);
+    }
+
+    private String getReport() {
+        String word = mWord.getEnglishWord();
+        String translate = mWord.getPersianWord();
+
+        String report = getString(R.string.word_report, word, translate);
+        return report;
+    }
+
 }

@@ -41,11 +41,13 @@ public class WordListFragment extends Fragment {
     public static final String TAG = "WLF";
     public static final String TAG_WORD_DETAIL_FRAGMENT = "wordDetailFragment";
     public static final String BUNDLE_LANGUAGE_MODE = "languageMode";
+    public static final String KEY_SEARCH_TITLE = "searchTitle";
     private RecyclerView mRecyclerView;
     private FloatingActionButton mAddButton;
 
     private WordDBRepository mRepository;
     private WordAdapter mWordAdapter;
+    private String searchTitle;
 
     private boolean isEnglish = true;
 
@@ -67,8 +69,10 @@ public class WordListFragment extends Fragment {
         setHasOptionsMenu(true);
         mRepository = WordDBRepository.getInstance(getActivity());
 
-        if(savedInstanceState != null)
+        if (savedInstanceState != null) {
             isEnglish = savedInstanceState.getBoolean(BUNDLE_LANGUAGE_MODE, true);
+            searchTitle = savedInstanceState.getString(KEY_SEARCH_TITLE);
+        }
     }
 
     @Override
@@ -101,7 +105,11 @@ public class WordListFragment extends Fragment {
     }
 
     private void updateUI() {
-        List<Word> words = mRepository.getWords();
+        List<Word> words;
+        if (isEnglish)
+            words = mRepository.getEnglishWords();
+        else
+            words = mRepository.getPersianWords();
 
         if (mWordAdapter == null) {
             mWordAdapter = new WordAdapter(words);
@@ -117,6 +125,7 @@ public class WordListFragment extends Fragment {
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putBoolean(BUNDLE_LANGUAGE_MODE, isEnglish);
+        outState.putString(KEY_SEARCH_TITLE, searchTitle);
     }
 
     private void setListeners() {
@@ -141,6 +150,14 @@ public class WordListFragment extends Fragment {
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
 
         searchView.setImeOptions(EditorInfo.IME_ACTION_DONE);
+
+        if(searchTitle != null) {
+            searchItem.expandActionView();
+            searchView.setQuery(searchTitle, true);
+            mWordAdapter.getFilter().filter(searchTitle);
+            searchView.clearFocus();
+
+        }
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -256,6 +273,7 @@ public class WordListFragment extends Fragment {
                         filteredList.addAll(mWordsFull);
                     else {
                         String filter = charSequence.toString().toLowerCase().trim();
+                        searchTitle=  filter;
                         for (Word word : mWordsFull)
                             if (word.getEnglishWord().toLowerCase().contains(filter) ||
                                     word.getPersianWord().toLowerCase().contains(filter))

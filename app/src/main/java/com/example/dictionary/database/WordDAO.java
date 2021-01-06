@@ -23,9 +23,15 @@ public interface WordDAO {
     @Delete
     void deleteWord(Word word);
 
-    @Query("SELECT * FROM wordTable")
+    @Query("SELECT * FROM wordTable ORDER BY english_word, persian_word asc")
     List<Word> getWords();
 
     @Query("SELECT * FROM wordTable WHERE uuid = :uuid")
     Word getWord(UUID uuid);
+
+    @Query("SELECT * FROM wordTable ORDER BY english_word asc")
+    List<Word> getEnglishWords();
+
+    @Query("SELECT * FROM wordTable ORDER BY persian_word asc")
+    List<Word> getPersianWords();
 }

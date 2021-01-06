@@ -9,4 +9,8 @@
     <string name="item_search">Search</string>
     <string name="main_word">Word</string>
     <string name="word_translate">Translate</string>
+    <string name="send_report">send word report</string>
+    <string name="word_report">Word: %1$s ,
+        Translate: %2$s
+    </string>
 </resources>
